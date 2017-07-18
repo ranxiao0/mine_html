@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>CSR首页</title>
+		<link rel="stylesheet" href="css/final.css" />
+		<link href="img/suoni.ico"rel="shortcut icon" />
+	</head>
+
+	<body>
+		<div class="header">
+			<div class="logo">
+				<div class="logo-left">
+					<a href="http://www.sony.com.cn/"><img src="img/logo-left.jpg"></a>
+				</div>
+				<div class="logo-right"><img src="img/logo-right.gif"> </div>
+			</div>
+			<div class="menu">
+				<a href="/终极final/final.html" style="color:deepskyblue;">首页</a>
+				<span class="sep">|</span>
+				<a href="http://www.sony.com.cn/csr/2gszl.htm">公司治理</a>
+				<span class="sep">|</span>
+				<a href="http://www.sony.com.cn/csr/3zrgl.htm">责任管理</a>
+				<span class="sep">|</span>
+				<a href="http://www.sony.com.cn/csr/4ygzr.htm">员工责任</a>
+				<span class="sep">|</span>
+				<a href="http://www.sony.com.cn/csr/5cpzr.htm">产品责任</a>
+				<span class="sep">|</span>
+				<a href="http://www.sony.com.cn/csr/6sqjy.htm">社区与教育</a>
+				<span class="sep">|</span>
+				<a href="http://www.sony.com.cn/csr/7hjzr.htm">环境责任</a>
+				<span class="sep">|</span>
+				<a href="http://www.sony.com.cn/csr/8gczc.htm">高层致辞</a>
+			</div>
+		</div>
+		<div class="container">
+			<!--<div class="container-top"></div>-->
+			<section class="carousel">
+            <div class="carousel-content-wrapper clearfix">
+                <a href="http://www.sony.com.cn/ses/index.html"><img src="img/sntm.jpg" alt="sntm" class="carousel-img"></a>
+                <a href="http://www.sony.com.cn/csr/72.htm"><img src="img/snmxjs.jpg" alt="snmxjs" class="carousel-img"></a>
+                <a href="http://www.sony.com.cn/csr/7-2-3.htm"><img src="img/lscp.jpg" alt="lscp" class="carousel-img"></a>
+                <a href="http://www.sony.com.cn/ses/index.html"><img src="img/sntm.jpg" alt="sntm" class="carousel-img"></a>
+                <a href="http://www.sony.com.cn/csr/72.htm"><img src="img/snmxjs.jpg" alt="snmxjs" class="carousel-img"></a>
+            </div>
+            <ul class="carousel-dot">
+                <li class="carousel-dot-li">
+                    <p>索尼梦想教室</p>
+                    <img src="img/snmxjs-1.jpg"   alt="snmxjs">
+                </li>
+                <li class="carousel-dot-li">
+                    <p>绿色食品</p>
+                    <img src="img/lscp-1.jpg" alt="lscp">
+                </li>
+                <li class="carousel-dot-li">
+                    <p>索尼探梦</p>
+                    <img src="img/sntm-1.jpg" alt="sntm">
+                </li>
+            </ul>
+            <!-- 点点点 -->
+        </section>
+		<script>
+			'use strict';
+            function Carousel(count) {
+                this.count = count;
+                this.curPage = 1;
+                this.timer = null;
+                this.imgWidth = 1000;
+                this.imgs = document.querySelectorAll('.carousel-img');
+                this.wrapper = document.querySelector('.carousel');
+                this.wrapperContent = document.querySelector('.carousel-content-wrapper');
+                this.ready();
+            }
+            Carousel.prototype = {
+                ready() {
+                    this.init();
+                    this.timer = setInterval(this.nextAction.bind(this), 5000);
+                    this.initEvents();
+                },
+                init() {
+                    this.wrapperContent.classList.remove('carousel-content-wrapper-transition');//imp
+                    this.wrapperContent.style.left = -this.curPage*this.imgWidth +'px';
+                },
+                animate(index) {
+                    var distance = index - this.curPage,
+                        num = this.count + 2,
+                        dots = document.querySelectorAll('.carousel-dot-li')
+                    //this.carouselFlag = false;//防止再点击
+                    this.curPage = index;
+                    this.wrapperContent.classList.add('carousel-content-wrapper-transition');
+                    this.wrapperContent.style.left = -this.curPage*this.imgWidth + 'px'
+                    if(distance > 0 && this.curPage === 4) {
+                        setTimeout(() => {
+                            this.wrapperContent.classList.remove('carousel-content-wrapper-transition');
+                            this.curPage = 1;
+                            this.wrapperContent.style.left = -this.curPage*this.imgWidth + 'px';
+                        }, 300)
+                    }
+                    if(distance < 0 && this.curPage === 0) {
+                        setTimeout(() => {
+                            this.wrapperContent.classList.remove('carousel-content-wrapper-transition');
+                            this.curPage = 3;
+                            this.wrapperContent.style.left = -this.curPage*this.imgWidth + 'px';
+                        }, 300)
+                    }
+                    dots.forEach((e, ind) => {
+                        if(distance > 0) {
+                            var flag = this.curPage === 4 ? 1 :this.curPage;
+                        }else {
+                            var flag = this.curPage === 0 ? 3 :this.curPage;
+                        }
+                    })
+                },
+                nextAction() {
+                    var num = this.count + 2,
+                        index = this.curPage < num - 1 ? this.curPage + 1 : 0;
+                    this.animate(index);
+                },
+                prevAction() {
+                    var num = this.count + 2,
+                        index = this.curPage > 0 ? this.curPage - 1 : num - 1;
+                    this.animate(index);
+                },
+                initEvents() {//事件绑定
+                    let dots = document.querySelectorAll('.carousel-dot-li'),
+                        resizeTimer = null,
+                        self =this;
+                    this.wrapper.onmouseover = () => {//清除动画
+                        clearInterval(this.timer);
+                        this.timer = null;
+                    }
+                    this.wrapper.onmouseout = () => {
+                        if(this.timer) {
+                            clearInterval(this.timer);
+                            this.timer = null;
+                        }
+                        this.timer = setInterval(this.nextAction.bind(this), 5000);
+                    }
+                    for(var i = 0, len = dots.length; i < len; i++) (function(i){//给每个dot添加事件
+                        dots[i].onmouseover = () => {
+                            self.animate(i+1);
+                        }
+                    })(i)
+                }
+            }
+
+            var carousel = new Carousel(3);
+		</script>	
+			
+			
+			
+			
+			
+			
+			<div class="news">
+				<ul>
+				<li style="width: 1000px;height: 50px;padding: 20px 0 0 0;">
+					<div class="ll">CSR新闻</div>
+					<div class="lr">
+						<a href="http://www.sony.com.cn/csr/63.htm"></a>
+					</div>
+				</li>
+				<li>
+					<span>2017/6/5</span><br />
+					<a href="http://www.sony.com.cn/csr/212.htm">2017年索尼“梦想教室”正式在临汾启动</a>
+				</li>
+				<li>
+					<span>2017/4/26</span><br />
+					<a href="http://www.sony.com.cn/csr/213.htm">地球日 爱地球</a>
+				</li>
+				<li>
+					<span>2017/4/21</span><br />
+					<a href="http://www.sony.com.cn/csr/215.htm">构筑快乐 启迪梦想</a>
+				</li>
+				<li>
+					<span>2017/4/5</span><br />
+					<a href="http://www.sony.com.cn/csr/209.htm">2017年地球一小时，索尼在行动</a>
+				</li>
+				<li>
+					<span>2017/3/20</span><br />
+					<a href="http://www.sony.com.cn/csr/210.htm">2017索尼中国（北京）工会春季家庭日活动——探梦科学之旅圆满结束</a>
+				</li>
+				<li>
+					<span>2017/3/8</span><br />
+					<a href="http://www.sony.com.cn/csr/208.htm">第7届索尼在华企业社会责任圆桌会议结束，重点都说了什么？</a>
+				</li>
+				<li>
+					<span>2016/11/29</span><br />
+					<a href="http://www.sony.com.cn/csr/207.htm">培育科技梦想 激发创新热情</a>
+				</li>
+			</ul>
+
+			</div>
+		</div>
+		<div class="footer">
+			<div class="ak">
+			<div class="report">
+				<img src="img/report.jpg" />
+				<div class="lk">
+					<div class="lk1"><a href="http://www.sony.com.cn/csr/images/reports/CSR_Report2016.pdf"></a></div>
+					<div class="lk2"><a href="http://www.sony.com.cn/csr/9csrbg.html"></a></div>
+				</div>
+			</div>
+			<div class="site">
+				<a href="http://www.sony.net/SonyInfo/csr/">
+					<img src="img/site.jpg" />
+				</a>
+			</div>
+		</div>
+			<div class="end">
+				<div class="end-left">
+					<a href="http://www.sony.com.cn/" class="sch">Sony China Home</a>
+					<div class="links">
+						<a href="http://www.sony.com.cn/products/contactus.htm">联系我们</a>
+						<span>|</span>
+						<a href="http://www.sony.com.cn/products/shengming.htm">责任声明</a>
+					</div>
+				</div>
+				<div class="end-right">
+					<span>京ICP备05036958号</span>
+					<span>索尼（中国）有限公司 版权所有</span>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>
